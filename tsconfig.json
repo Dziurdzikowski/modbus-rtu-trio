@@ -72,12 +72,13 @@
   },
   "include": [
     "@types/**/*",
-    "**/*.ts",
-    "index.ts",
+    "src/**/*.ts",
+    "src/*.ts",
+    "*.ts",
     "modbus/*.ts",
     "modbus/**/*.ts",
     "modbus/types/**/*.ts"
-  ],
+, "master.ts", "slave.ts"  ],
   "exclude": [
     "node_modules",
     "!node_modules/@types"
