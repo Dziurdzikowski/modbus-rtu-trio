@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Launch SLAVE",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeVersion": "14.16.1",
+            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
+            // "runtimeArgs": [
+            //     "-m",
+            //     "ts-node"
+            // ],
+            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "env": {
+                "DEBUG": "*",
+                "NODE_DEBUG": "*"
+            },
+            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+            "program": "${workspaceFolder}/slave.ts",
+            // "outFiles": [
+            //     "${workspaceFolder}/**/*.js"
+            // ],
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Launch master",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeVersion": "14.16.1",
+            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
+            // "runtimeArgs": [
+            //     "-m",
+            //     "ts-node"
+            // ],
+            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "env": {
+                "DEBUG": "*",
+                "NODE_DEBUG": "*"
+            },
+            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+            "program": "${workspaceFolder}/master.ts",
+            // "outFiles": [
+            //     "${workspaceFolder}/**/*.js"
+            // ],
+        }
+    ]
+}
