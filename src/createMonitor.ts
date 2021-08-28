@@ -1,6 +1,6 @@
 import stream from 'stream';
 import * as Modbus from '../modbus/modbus';
-
+import { FC } from '../modbus/codes/function-codes'
 const SerialPort = require('../node_modules/serialport/lib/index');
 
 export const createMonitor = (serialPath) => {
@@ -12,16 +12,38 @@ export const createMonitor = (serialPath) => {
     monitor.pipe(masterSocket);
     masterSocket.pipe(monitor);
 
+    const codeToName = {
+
+    };
+
     const dataLogger = (data) => {
         const request: Modbus.ModbusRTURequest | null = Modbus.ModbusRTURequest.fromBuffer(data);
-        const response: Modbus.ModbusRTUResponse | null = Modbus.ModbusRTUResponse.fromBuffer(data);
+        let response: Modbus.ModbusRTUResponse | null;
+
         if (request !== null) {
-            console.log(`[MONITOR} Founded RTU master request with name ${request.name} to slave ${request.slaveId} and body ${JSON.stringify(request.body)}`);
-        } else if (response !== null) {
-            console.log(`[MONITOR} Founded RTU slave response ${JSON.stringify(response)}`);
-        } else {
-            console.warn('UNKOWN DATA !');
+            response = Modbus.ModbusRTUResponse.fromBuffer(data);
+
+            let values;
+            if (response !== null) {
+                values = typeof (<any>response.body)._values === 'undefined' ? '' : `Values: ${(<any>response.body)._values}`;
+            }
+            if (response === null || values === '') {
+                values = typeof (<any>request.body)._values === 'undefined' && typeof (<any>request.body).value === 'undefined' ? '' : `Values: ${((<any>request.body)._values ? (<any>request.body)._values : (<any>request.body).value)}`;
+            }
+
+            console.log(`[MONITOR} Master request ${request.name} to slave ${request.slaveId}, Address: ${request.address} ${values}`);
+            return;
         }
+
+        response = Modbus.ModbusRTUResponse.fromBuffer(data);
+        if (response !== null) {
+            let values = typeof (<any>response.body)._values === 'undefined' && typeof (<any>response.body).value === 'undefined' ? '' : `Values: ${(<any>response.body)._values ? (<any>response.body)._values : (<any>response.body).value}`;
+            console.log(`[MONITOR} Slave response ${FC[response.body.fc]}  Address: ${response._address} ${values}`);
+            return;
+        }
+
+        console.warn('UNKOWN DATA !');
+        
     };
 
     monitor.addListener('data', (data) => dataLogger(data))
