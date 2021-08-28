@@ -86,6 +86,17 @@ class BufferUtils {
 
     return outputByte + maskedOriginalByte
   }
+  public static bufferToArrayBool (buffer: Buffer): BooleanArray {
+    const statusArray: BooleanArray = [];
+
+    for (let i = 0; i < buffer.length; i++) {
+      statusArray.push(
+        buffer.readUInt8(i) === 0x00 ? false: true
+      )
+    }
+
+    return statusArray;
+  }
 
   public static bufferToArrayStatus (buffer: Buffer): BooleanArray {
     const statusArray: BooleanArray = []

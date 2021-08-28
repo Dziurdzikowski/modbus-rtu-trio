@@ -6,8 +6,8 @@ export const createSlave = (serialPath): Modbus.ModbusRTUServer => {
     const slave = new Modbus.server.RTU(
         new SerialPort(serialPath),
         {
-            coils: Buffer.alloc(256, 0x0),
-            discrete: Buffer.alloc(256, 0x0),
+            coils: Buffer.alloc(24, 0xFF00),
+            discrete: Buffer.alloc(256, 0x0000),
             holding: Buffer.alloc(512, 0x0000),
             input: Buffer.alloc(512, 0x0000),
         }
@@ -25,9 +25,10 @@ export const createSlave = (serialPath): Modbus.ModbusRTUServer => {
 
     readRequests.forEach((value) => {
         slave.on(
-            // @ts-ignore
-            `preRead${value}`,
-            (request) => console.log(`[SLAVE_${request.slaveId}][${value}][READ] Address ${request.address}`)
+            `preRead${value}` as any,
+            (request) => console.log(
+                `[SLAVE_${request.slaveId}][${value}][READ] Address ${request.address}`
+            )
         );
     });
 
@@ -40,33 +41,18 @@ export const createSlave = (serialPath): Modbus.ModbusRTUServer => {
 
     writeRequests.forEach((value) => {
         slave.on(
-            // @ts-ignore
-            `preWrite${value}`,
-            (request: (Modbus.ModbusAbstractRequest | Modbus.ModbusRTURequest)) => console.log(`[SLAVE_${request.slaveId}][${value}][WRITE] Address ${request.address}, Quantity: ${(<WriteSingleRegisterRequestBody>request.body).quantity}, Value: ${(<WriteSingleRegisterRequestBody>request.body).value}`)
+            `preWrite${value}` as any,
+            (request: (Modbus.ModbusAbstractRequest | Modbus.ModbusRTURequest)) => {
+                let quantity: string|number = (<WriteSingleRegisterRequestBody>request.body).quantity
+                quantity = typeof quantity === 'undefined' ? '' : `, Quantity: ${(<WriteSingleRegisterRequestBody>request.body).quantity}`;
+
+                let val = typeof (<any>request.body)._value !== 'undefined' ? (<any>request.body)._value : (<any>request.body)._valuesAsArray.join(', ');
+
+                console.log(
+                    `[SLAVE_${request.slaveId}][${value}][WRITE] Address: ${request.address}${quantity}, Value: ${val}`)
+            }
         );
     });
-
-    // slave.on(
-    //     'preReadInputRegisters',
-    //     (request) => console.log(`[SLAVE_${request.slaveId}][READ][InputRegisters] Address ${request.address}`)
-    // );
-
-    // slave.on(
-    //     'preReadHoldingRegisters',
-    //     (request) => console.log(`[SLAVE_${request.slaveId}][READ][HoldingRegisters] Address ${request.address}`)
-    // );
-
-    // slave.on(
-    //     'preReadCoils',
-    //     (request) => console.log(`[SLAVE_${request.slaveId}][READ][Coils] Address ${request.address}`)
-    // );
-
-    // slave.on(
-    //     'preReadDiscreteInputs',
-    //     (request) => console.log(`[SLAVE_${request.slaveId}][READ][ReadDiscreteInputs] Address ${request.address}`)
-    // );
-
-
 
     return slave;
 };

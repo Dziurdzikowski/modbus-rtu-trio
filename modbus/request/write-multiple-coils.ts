@@ -65,7 +65,7 @@ export default class WriteMultipleCoilsRequestBody extends ModbusRequestBody {
     }
   }
   private _address: number
-  private _values: boolean[] | Buffer
+  public _values: boolean[] | Buffer
   private _quantity: number
   private _numberOfBytes: number
   private _valuesAsBuffer: Buffer
@@ -112,14 +112,23 @@ export default class WriteMultipleCoilsRequestBody extends ModbusRequestBody {
     if (this._values instanceof Buffer) {
       this._valuesAsBuffer = this._values
       this._byteCount = Math.ceil(this._quantity / 8) + 6
-      this._valuesAsArray = []
-      for (let i = 0; i < this._quantity; i += 1) {
-        const pos = i % 8
-        const curByteIdx = Math.floor(i / 8)
-        const curByte = this._values.readUInt8(curByteIdx)
+      this._valuesAsArray = [];
+      let binaryCharArray;
+      for (let i = 0; i < this._numberOfBytes; i++) {
+        binaryCharArray = this._values.readUInt8(i).toString(2).split('');
 
-        this._valuesAsArray.push((curByte & Math.pow(2, pos)) > 0)
+        binaryCharArray.forEach((bit) => {
+          this._valuesAsArray.push( bit === '1' ? true : false );
+        })
       }
+
+      // for (let i = 0; i < this._quantity; i += 1) {
+      //   const pos = i % 8
+      //   const curByteIdx = Math.floor(i / 8)
+      //   const curByte = this._values.readUInt8(curByteIdx)
+
+      //   this._valuesAsArray.push((curByte & Math.pow(2, pos)) > 0)
+      // }
     } else if (this._values instanceof Array) {
       this._byteCount = Math.ceil(this._values.length / 8) + 6
 
@@ -155,7 +164,7 @@ export default class WriteMultipleCoilsRequestBody extends ModbusRequestBody {
     payload.writeUInt16BE(this._address, 1) // start address
     payload.writeUInt16BE(this._quantity, 3) // quantity of coils
     payload.writeUInt8(this._numberOfBytes, 5) // byte count
-    this._valuesAsBuffer.copy(payload, 6, 0, this._byteCount) // values
+    this._valuesAsBuffer.copy(payload, 6, 0, this._numberOfBytes) // values
 
     return payload
     // if (this._values instanceof Buffer) {

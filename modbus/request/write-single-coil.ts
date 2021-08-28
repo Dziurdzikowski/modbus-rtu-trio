@@ -32,7 +32,7 @@ export default class WriteSingleCoilRequestBody extends ModbusRequestBody {
     try {
       const fc = buffer.readUInt8(0)
       const address = buffer.readUInt16BE(1)
-      const value = buffer.readUInt16BE(3) === 0xff00
+      const value = buffer.readUInt8(3) === 0xFF
 
       if (fc !== FC.WRITE_SINGLE_COIL) {
         return null
@@ -65,7 +65,7 @@ export default class WriteSingleCoilRequestBody extends ModbusRequestBody {
 
     payload.writeUInt8(this._fc, 0) // function code
     payload.writeUInt16BE(this._address, 1) // output address
-    payload.writeUInt16BE(this._value ? 0xFF00 : 0x0000, 3) // output value
+    payload.writeUInt16BE(this._value ? 0xFF : 0x00, 3) // output value
 
     return payload
   }

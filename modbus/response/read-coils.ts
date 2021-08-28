@@ -7,7 +7,8 @@ import ModbusReadResponseBody from './read-response-body'
 
 const {
   bufferToArrayStatus,
-  arrayStatusToBuffer
+  arrayStatusToBuffer,
+  bufferToArrayBool
 } = BufferUtils
 
 /** Read Coils Response Body
@@ -45,7 +46,7 @@ export default class ReadCoilsResponseBody extends ModbusReadResponseBody {
    * @returns {ReadCoilsResponseBody}
    */
   public static fromRequest (requestBody: ReadCoilsRequestBody, coils: Buffer) {
-    const coilsStatus = bufferToArrayStatus(coils)
+    const coilsStatus = bufferToArrayBool(coils)
 
     const start = requestBody.start
     const end = start + requestBody.count

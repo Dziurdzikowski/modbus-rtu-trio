@@ -31,7 +31,8 @@ import { FC, isFunctionCode } from './codes'
 
 const {
   bufferToArrayStatus,
-  arrayStatusToBuffer
+  arrayStatusToBuffer,
+  bufferToArrayBool
 } = BufferUtils
 
 import Debug = require('debug'); const debug = Debug('modbus tcp response handler')
@@ -302,25 +303,49 @@ export default class ModbusServerResponseHandler<FR extends ModbusAbstractRespon
     this._server.emit('preWriteMultipleCoils', request, cb)
 
     const responseBody = WriteMultipleCoilsResponseBody.fromRequest(request.body)
-    const oldStatus = bufferToArrayStatus(this._server.coils)
-    const requestCoilValues = bufferToArrayStatus(request.body.valuesAsBuffer)
+    request.body._values = [];
+
+    let binString = request.body.valuesAsBuffer.readUInt8(0).toString(2).padStart(
+      request.body.quantity > 8 ? 8 : request.body.quantity,
+      '0'
+    );
+    let values: boolean[] = [];
+
+    binString.split('').forEach((bit) => {
+      // @ts-ignore
+      values.push(
+        Boolean(bit === '1' ? true : false)
+      );
+    })
+
+    
+    const oldStatus = bufferToArrayBool(this._server.coils)
+    // const requestCoilValues = bufferToArrayStatus(request.body.valuesAsBuffer)
+    // const requestCoilValues = request.body.valuesAsArray;
     const start = request.body.address
     const end = start + request.body.quantity
+
+    // let values = request.body.values.
 
     const newStatus = oldStatus.map((byte, i) => {
       let value = byte
       const inRange = (i >= start && i < end)
 
       if (inRange) {
-        const newValue = requestCoilValues.shift()
+        const newValue = values.shift()
         value = newValue !== undefined ? newValue : byte
+
+        if (newValue !== undefined) {
+          this._server.coils.writeUInt8(Number(newValue), (i - 1) );
+
+        }
       }
 
       return value
     })
 
     this._server.emit('writeMultipleCoils', this._server.coils, oldStatus)
-    this._server.coils.fill(arrayStatusToBuffer(newStatus))
+    // this._server.coils.set(arrayStatusToBuffer(newStatus))
     this._server.emit('postWriteMultipleCoils', this._server.coils, newStatus)
 
     const response = this._fromRequest(request, responseBody)
