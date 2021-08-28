@@ -20,7 +20,7 @@ export default class RequestDataFrame {
         switch (this.frameCode) {
             case FrameCodes.READ_COIL:
                 this.frameType = FrameCodes.READ_COIL;
-                this.parseReadCoilData();
+                this.baseReadParse();
                 break;
             case FrameCodes.WRITE_SINGLE_COIL:
                 this.frameType = FrameCodes.WRITE_SINGLE_COIL;
@@ -32,11 +32,11 @@ export default class RequestDataFrame {
                 break;
             case FrameCodes.READ_DISCRETE_INPUT:
                 this.frameType = FrameCodes.READ_DISCRETE_INPUT;
-                this.parseReadDiscreteInputData();
+                this.baseReadParse();
                 break;
             case FrameCodes.READ_HOLDING_REGISTERS:
                 this.frameType = FrameCodes.READ_HOLDING_REGISTERS;
-                this.parseReadHoldingRegisterData();
+                this.baseReadParse();
                 break;
             case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
                 this.frameType = FrameCodes.WRITE_SINGLE_HOLDING_REGISTER;
@@ -71,28 +71,20 @@ export default class RequestDataFrame {
 
     protected parseSingleWriteHoldingRegisterData() {
         this._address = this.data.readUInt16BE(2);
-        this._quantity = this.data.readUInt16BE(4);
-        this._value = [this.data.readUInt16BE(6)];
+        this._value = [this.data.readUInt16BE(4)];
     }
 
-    protected parseReadHoldingRegisterData() {
-        this._address = this.data.readUInt16BE(2);
-        this._quantity = this.data.readUInt16BE(4);
-    }
-
-    protected parseReadDiscreteInputData() {
-        this._address = this.data.readUInt16BE(2);
-        this._quantity = this.data.readUInt16BE(4);
-    }
-
-    protected parseReadCoilData() {
+    protected baseReadParse() {
         this._address = this.data.readUInt16BE(2);
         this._quantity = this.data.readUInt16BE(4);
     }
 
     protected parseWriteSingleCoilData() {
         this._address = this.data.readUInt16BE(2);
-        this._value =  [this.data.readUInt8(4)];
+        const tmp = this.data.readUInt16BE(4);
+        this._value = [
+            (tmp === 0xFF ? 1 : 0)
+        ];
     }
 
     protected parseWriteMultipleCoilData() {
@@ -123,26 +115,30 @@ export default class RequestDataFrame {
 
         switch (this.frameType) {
             case FrameCodes.WRITE_SINGLE_COIL:
-                frameLog += ` Address: ${this._address}, Value: ${this._value?.shift()}`;
+            case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
+                let value = (this._value as number[])[0];
+                frameLog += ` Address: ${this._address}, Value: ${value.toString()}`;
                 break;
             case FrameCodes.READ_COIL:
-                frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
-                break;
-            case FrameCodes.WRITE_MULTIPLE_COILS:
-                frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}, Value: ${this._value?.join(', ')}`;
-                break;
             case FrameCodes.READ_DISCRETE_INPUT:
-                frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
-                break;
             case FrameCodes.READ_HOLDING_REGISTERS:
                 frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
                 break;
-            case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
-                frameLog += ` Address: ${this._address}, Value: ${this._value?.shift()}`;
-                break;
+            case FrameCodes.WRITE_MULTIPLE_COILS:
             case FrameCodes.WRITE_MULTIPLE_HOLDING_REGISTERS:
                 frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}, Value: ${this._value?.join(', ')}`;
                 break;
+            // frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}, Value: ${this._value?.join(', ')}`;
+            // break;
+            // case FrameCodes.READ_DISCRETE_INPUT:
+            //     frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
+            //     break;
+            // case FrameCodes.READ_HOLDING_REGISTERS:
+            //     frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
+            //     break;
+            // case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
+            //     frameLog += ` Address: ${this._address}, Value: ${this._value?.shift()}`;
+            //     break;
         }
 
         return frameLog;
