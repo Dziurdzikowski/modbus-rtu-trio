@@ -85,9 +85,11 @@ export {
   UserRequestMetrics
 } from './user-request-metrics'
 
+import ModbusServer from './modbus-server';
 export {
   ModbusTCPClient,
   ModbusRTUClient,
   ModbusTCPServer,
-  ModbusRTUServer
+  ModbusRTUServer,
+  ModbusServer
 }

@@ -11,71 +11,42 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
+            "runtimeVersion": "14.17.5",
             "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
             "env": {
-                "DEBUG": "*",
                 "NODE_DEBUG": "*"
             },
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
             "program": "${workspaceFolder}/slave.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
         },
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Master",
+            "name": "MASTER",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
+            "runtimeVersion": "14.17.5",
             "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
             "env": {
                 "DEBUG": "*",
                 "NODE_DEBUG": "*"
             },
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
             "program": "${workspaceFolder}/master.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
         },
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Monitor",
+            "name": "MONITOR",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
+            "runtimeVersion": "14.17.5",
             "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
             "env": {
                 // "DEBUG": "*",
-                // "NODE_DEBUG": "*"
+                "NODE_DEBUG": "*"
             },
-            "outputCapture": "std",
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
             "program": "${workspaceFolder}/monitor.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
         }
     ]
 }

@@ -1,22 +1,19 @@
 import stream from 'stream';
+import SerialConnection from './SerialConnection'
 import * as Modbus from '../modbus/modbus';
 import { FC } from '../modbus/codes/function-codes'
-const SerialPort = require('../node_modules/serialport/lib/index');
+
 
 export const createMonitor = (serialPath) => {
-    const monitor: stream.Duplex = new SerialPort(
+    const monitor: stream.Duplex = new SerialConnection(
         serialPath,
         { baudRate: 9600 }
     );
-    const masterSocket: stream.Duplex = new SerialPort('/dev/ttyS12', { baudRate: 9600 })
+    const masterSocket: stream.Duplex = new SerialConnection('/dev/ttyS12', { baudRate: 9600 })
     monitor.pipe(masterSocket);
     masterSocket.pipe(monitor);
 
-    const codeToName = {
-
-    };
-
-    const dataLogger = (data) => {
+    const dataLogger = (data: Buffer) => {
         const request: Modbus.ModbusRTURequest | null = Modbus.ModbusRTURequest.fromBuffer(data);
         let response: Modbus.ModbusRTUResponse | null;
 
@@ -25,10 +22,10 @@ export const createMonitor = (serialPath) => {
 
             let values;
             if (response !== null) {
-                values = typeof (<any>response.body)._values === 'undefined' ? '' : `Values: ${(<any>response.body)._values}`;
+                values = typeof (response.body as any)._values === 'undefined' ? '' : `Values: ${(response.body as any)._values}`;
             }
             if (response === null || values === '') {
-                values = typeof (<any>request.body)._values === 'undefined' && typeof (<any>request.body).value === 'undefined' ? '' : `Values: ${((<any>request.body)._values ? (<any>request.body)._values : (<any>request.body).value)}`;
+                values = typeof (request.body as any)._values === 'undefined' && typeof (request.body as any).value === 'undefined' ? '' : `Values: ${((request.body as any)._values ? (request.body as any)._values : (request.body as any).value)}`;
             }
 
             console.log(`[MONITOR} Master request ${request.name} to slave ${request.slaveId}, Address: ${request.address} ${values}`);
@@ -37,13 +34,13 @@ export const createMonitor = (serialPath) => {
 
         response = Modbus.ModbusRTUResponse.fromBuffer(data);
         if (response !== null) {
-            let values = typeof (<any>response.body)._values === 'undefined' && typeof (<any>response.body).value === 'undefined' ? '' : `Values: ${(<any>response.body)._values ? (<any>response.body)._values : (<any>response.body).value}`;
+            const values = typeof (response.body as any)._values === 'undefined' && typeof (response.body as any).value === 'undefined' ? '' : `Values: ${(response.body as any)._values ? (response.body as any)._values : (response.body as any).value}`;
             console.log(`[MONITOR} Slave response ${FC[response.body.fc]}  Address: ${response._address} ${values}`);
             return;
         }
 
         console.warn('UNKOWN DATA !');
-        
+
     };
 
     monitor.addListener('data', (data) => dataLogger(data))
