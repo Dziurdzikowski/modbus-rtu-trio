@@ -78,7 +78,8 @@
     // "listFiles": true,
   },
   "include": [
-    "./**/*"
+    "**/*",
+    "src/**/*"
   ],
   "exclude": [
     "./node_modules/**/*"

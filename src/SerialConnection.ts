@@ -129,6 +129,7 @@ const SerialPort: typeof SerialPortClass = require('@serialport/stream');
 import { default as Binding } from '@serialport/bindings';
 import { Stream } from 'stream';
 
+
 SerialPort.Binding = Binding
 SerialPort.parsers = {
     ByteLength: require('@serialport/parser-byte-length'),

@@ -12,9 +12,10 @@
                 "<node_internals>/**"
             ],
             "runtimeVersion": "14.17.5",
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
             "program": "${workspaceFolder}/slave.ts",
         },
@@ -26,10 +27,10 @@
                 "<node_internals>/**"
             ],
             "runtimeVersion": "14.17.5",
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                "DEBUG": "*",
-                "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
             "program": "${workspaceFolder}/master.ts",
         },
@@ -41,12 +42,14 @@
                 "<node_internals>/**"
             ],
             "runtimeVersion": "14.17.5",
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                // "DEBUG": "*",
-                "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
             "program": "${workspaceFolder}/monitor.ts",
+            "args": [],
+            "outputCapture": "std"
         }
     ]
 }

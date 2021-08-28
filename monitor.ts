@@ -1,4 +1,5 @@
 import { createMonitor } from './src/createMonitor'
 
 const serialPath = '/dev/ttyS11';
-const monitor = createMonitor(serialPath);
+const serialPathDwa = '/dev/ttyS12';
+createMonitor(serialPath, serialPathDwa);
