@@ -7,14 +7,13 @@ export const createSlave = (serialPath): Modbus.ModbusRTUServer => {
         new SerialPort(serialPath),
         {
             coils: Buffer.alloc(24, 0xFF00),
-            discrete: Buffer.alloc(256, 0x0000),
+            discrete: Buffer.alloc(256, 0xFF00),
             holding: Buffer.alloc(512, 0x0000),
             input: Buffer.alloc(512, 0x0000),
         }
     );
 
     console.log(`[SLAVE] Created at port ${serialPath}`);
-
 
     const readRequests = [
         'InputRegisters',

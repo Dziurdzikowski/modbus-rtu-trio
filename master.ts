@@ -8,7 +8,7 @@ const test_operations_list = [
     ...master.tests.singleRegister,
     ...master.tests.multipleRegisters,
     ...master.tests.coils,
-    // ...master.tests.discreteInputs,
+    ...master.tests.discreteInputs,
 ];
 
 setInterval(() => {
