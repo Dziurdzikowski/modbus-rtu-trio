@@ -7,7 +7,7 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Launch SLAVE",
+            "name": "SLAVE",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -31,7 +31,7 @@
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Launch master",
+            "name": "Master",
             "skipFiles": [
                 "<node_internals>/**"
             ],
@@ -48,6 +48,31 @@
             },
             // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
             "program": "${workspaceFolder}/master.ts",
+            // "outFiles": [
+            //     "${workspaceFolder}/**/*.js"
+            // ],
+        },
+        {
+            "type": "pwa-node",
+            "request": "launch",
+            "name": "Monitor",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "runtimeVersion": "14.16.1",
+            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
+            // "runtimeArgs": [
+            //     "-m",
+            //     "ts-node"
+            // ],
+            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "env": {
+                // "DEBUG": "*",
+                // "NODE_DEBUG": "*"
+            },
+            "outputCapture": "std",
+            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
+            "program": "${workspaceFolder}/monitor.ts",
             // "outFiles": [
             //     "${workspaceFolder}/**/*.js"
             // ],

@@ -1,6 +1,6 @@
 import { MasterWithTests, createMaster } from './src/createMaster';
 
-const serialPath = '/dev/ttyS11';
+const serialPath = '/dev/ttyS13';
 const master: MasterWithTests = createMaster(serialPath, 1);
 
 let test_operation_index = 0;

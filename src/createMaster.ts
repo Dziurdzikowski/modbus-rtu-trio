@@ -12,7 +12,7 @@ const SerialPort = require('serialport');
 
 export const createMaster = (serialPath: string, slaveID: number = 1): MasterWithTests => {
     const master = new MasterWithTests(
-        new SerialPort(serialPath),
+        new SerialPort(serialPath, { baudRate: 9600 }),
         slaveID,
         5000
     );
