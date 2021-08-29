@@ -74,7 +74,9 @@
     "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
     "rootDir": "./",
     "skipDefaultLibCheck": true,
-    "allowUmdGlobalAccess": true
+    "allowUmdGlobalAccess": true,
+    "pretty": true,
+    "preserveSymlinks": false
     // "listFiles": true,
   },
   "include": [

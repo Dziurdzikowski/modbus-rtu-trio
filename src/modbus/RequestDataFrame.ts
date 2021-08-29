@@ -52,6 +52,22 @@ export default class RequestDataFrame {
         }
     }
 
+    get quantity() {
+        return this._quantity;
+    }
+
+    get value() {
+        return this._value;
+    }
+
+    get address() {
+        return this._address;
+    }
+
+    get slaveID() {
+        return this._slaveID;
+    }
+
     protected parseMultiWriteHoldingRegisterData() {
         this._value = [];
         this._address = this.data.readUInt16BE(2);
@@ -116,7 +132,7 @@ export default class RequestDataFrame {
         switch (this.frameType) {
             case FrameCodes.WRITE_SINGLE_COIL:
             case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
-                let value = (this._value as number[])[0];
+                const value = (this._value as number[])[0];
                 frameLog += ` Address: ${this._address}, Value: ${value.toString()}`;
                 break;
             case FrameCodes.READ_COIL:
@@ -128,17 +144,6 @@ export default class RequestDataFrame {
             case FrameCodes.WRITE_MULTIPLE_HOLDING_REGISTERS:
                 frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}, Value: ${this._value?.join(', ')}`;
                 break;
-            // frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}, Value: ${this._value?.join(', ')}`;
-            // break;
-            // case FrameCodes.READ_DISCRETE_INPUT:
-            //     frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
-            //     break;
-            // case FrameCodes.READ_HOLDING_REGISTERS:
-            //     frameLog += ` Address: ${this._address}, Quantity: ${this._quantity}`;
-            //     break;
-            // case FrameCodes.WRITE_SINGLE_HOLDING_REGISTER:
-            //     frameLog += ` Address: ${this._address}, Value: ${this._value?.shift()}`;
-            //     break;
         }
 
         return frameLog;

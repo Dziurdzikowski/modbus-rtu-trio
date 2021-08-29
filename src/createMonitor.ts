@@ -3,6 +3,8 @@ import SerialConnection from './SerialConnection'
 import * as Modbus from '../modbus/modbus';
 import { FC } from '../modbus/codes/function-codes'
 import SerialDataParser from './modbus/SerialDataParser';
+import RequestDataFrame from './modbus/RequestDataFrame';
+import ResponseDataFrame from './modbus/ResponseDataFrame';
 
 const dataLogger = (data: Buffer) => {
     const request: Modbus.ModbusRTURequest | null = Modbus.ModbusRTURequest.fromBuffer(data);
@@ -34,21 +36,34 @@ const dataLogger = (data: Buffer) => {
 };
 
 export const createMonitor = (serialPath = '/dev/ttyS11', serialPathDwa = '/dev/ttyS12') => {
-    const monitor: stream.Duplex = new SerialConnection(serialPath, { baudRate: 9600 });
+    const slaveSocket: stream.Duplex = new SerialConnection(serialPath, { baudRate: 9600 });
     const masterSocket: stream.Duplex = new SerialConnection(serialPathDwa, { baudRate: 9600 })
 
-    monitor.pipe(masterSocket);
-    masterSocket.pipe(monitor);
+    slaveSocket.pipe(masterSocket);
+    masterSocket.pipe(slaveSocket);
 
     console.log(`[MONITOR] Created at ports ${serialPath}, ${serialPathDwa}`);
 
+    let lastRequest: RequestDataFrame;
+    let lastResponse: ResponseDataFrame;
 
     masterSocket.addListener(
         'data',
-        (data) => SerialDataParser.ParseRequest(data).logInfo()
+        (data) => {
+            lastRequest = SerialDataParser.ParseRequest(data);
+            slaveSocket.once('data', (data) => {
+                lastResponse = SerialDataParser.ParseResponse(data, lastRequest);
+                lastResponse.logInfo();
+            })
+            lastRequest.logInfo()
+        }
     );
+
     // monitor.addListener('data', (data) => dataLogger(data))
 
 
-    return monitor;
+    return {
+        slaveSocket,
+        masterSocket
+    };
 };

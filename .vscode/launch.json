@@ -49,7 +49,7 @@
             },
             "program": "${workspaceFolder}/monitor.ts",
             "args": [],
-            "outputCapture": "std"
+            "outputCapture": "console"
         }
     ]
 }
