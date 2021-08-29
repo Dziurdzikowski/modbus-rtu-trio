@@ -11,71 +11,45 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeVersion": "14.17.5",
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                "DEBUG": "*",
-                "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
-            "program": "${workspaceFolder}/slave.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
+            "program": "${workspaceFolder}/scripts/createSlave.ts",
         },
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Master",
+            "name": "MASTER",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeVersion": "14.17.5",
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                "DEBUG": "*",
-                "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
-            "program": "${workspaceFolder}/master.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
+            "program": "${workspaceFolder}/scripts/createMaster.ts",
         },
         {
             "type": "pwa-node",
             "request": "launch",
-            "name": "Monitor",
+            "name": "MONITOR",
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "runtimeVersion": "14.16.1",
-            // "runtimeExecutable": "/home/adi/.nvm/versions/node/v14.16.1/bin/node",
-            // "runtimeArgs": [
-            //     "-m",
-            //     "ts-node"
-            // ],
-            "runtimeArgs": ["--trace-warnings", "-r", "ts-node/register"],
+            "runtimeVersion": "14.17.5",
+            "runtimeExecutable": "ts-node-dev",
+            "runtimeArgs": ["--trace-warnings", "--respawn"],
             "env": {
-                // "DEBUG": "*",
-                // "NODE_DEBUG": "*"
+                "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            "outputCapture": "std",
-            // "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node",
-            "program": "${workspaceFolder}/monitor.ts",
-            // "outFiles": [
-            //     "${workspaceFolder}/**/*.js"
-            // ],
+            "program": "${workspaceFolder}/scripts/createMonitor.ts",
+            "args": [],
+            "outputCapture": "console"
         }
     ]
 }

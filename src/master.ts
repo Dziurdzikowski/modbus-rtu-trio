@@ -1,18 +1,15 @@
+import SerialConnection from './SerialConnection'
 import {
     MasterWithTests,
     SingleRegisterTest,
     MultipleRegistersTest,
     CoilsTest,
-    DiscreteInputsTest
+    DiscreteInputsTest,
 } from './masterTestOperations';
-
-export { MasterWithTests } from './masterTestOperations';
-
-const SerialPort = require('serialport');
 
 export const createMaster = (serialPath: string, slaveID: number = 1): MasterWithTests => {
     const master = new MasterWithTests(
-        new SerialPort(serialPath, { baudRate: 9600 }),
+        new SerialConnection(serialPath),
         slaveID,
         5000
     );
@@ -26,3 +23,5 @@ export const createMaster = (serialPath: string, slaveID: number = 1): MasterWit
 
     return master;
 };
+
+export { MasterWithTests } from './masterTestOperations';

@@ -18,7 +18,7 @@ export class MasterWithTests extends Modbus.client.RTU {
 export const SingleRegisterTest = (master: Modbus.ModbusRTUClient): CallableFunction[] => [
     () => {
         master.readHoldingRegisters(0x0001, 1).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
             console.log(`[MASTER][SingleRegister][READ] Address: 0001, Value: ${response.body.values[0]}`);
         }, (errorReason) => {
@@ -26,7 +26,7 @@ export const SingleRegisterTest = (master: Modbus.ModbusRTUClient): CallableFunc
         });
     },
     () => {
-        let randomVal = randomInt(1, 255);
+        const randomVal = randomInt(1, 255);
         console.log(
             `[MASTER][SingleRegister][WRITE] Address: 0001, Value: ${randomVal}`
         );
@@ -36,7 +36,7 @@ export const SingleRegisterTest = (master: Modbus.ModbusRTUClient): CallableFunc
     },
     () => {
         master.readHoldingRegisters(0x0001, 1).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
             console.log(`[MASTER][SingleRegister][READ] Address: 0001, Value: ${response.body.values[0]}`);
         }, (errorReason) => {
@@ -48,7 +48,7 @@ export const SingleRegisterTest = (master: Modbus.ModbusRTUClient): CallableFunc
 export const MultipleRegistersTest = (master: Modbus.ModbusRTUClient): CallableFunction[] => [
     () => {
         master.readHoldingRegisters(0x0003, 2).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
             console.log(`[MASTER][MultipleRegisters][READ] Address: 0003-0004, Values: ${response.body.values.join(', ')}`);
         }, (errorReason) => {
@@ -56,7 +56,7 @@ export const MultipleRegistersTest = (master: Modbus.ModbusRTUClient): CallableF
         });
     },
     () => {
-        let randomVal = [randomInt(1, 255), randomInt(1, 255)];
+        const randomVal = [randomInt(1, 255), randomInt(1, 255)];
         console.log(
             `[MASTER][MultipleRegisters][WRITE] Address: 0003-0004, Values: ${randomVal.join(', ')}`
         );
@@ -66,7 +66,7 @@ export const MultipleRegistersTest = (master: Modbus.ModbusRTUClient): CallableF
     },
     () => {
         master.readHoldingRegisters(0x0003, 2).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
             console.log(`[MASTER][MultipleRegisters][READ] Address: 0003-0004, Values: ${response.body.values.join(', ')}`);
         }, (errorReason) => {
@@ -78,10 +78,10 @@ export const MultipleRegistersTest = (master: Modbus.ModbusRTUClient): CallableF
 export const CoilsTest = (master: Modbus.ModbusRTUClient): CallableFunction[] => [
     () => {
         master.readCoils(1, 3).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
-            let values: Buffer = response.body.values;
-            let binDecoded = values.readUInt8(0).toString(2).padStart(3, '0').split('');
+            const values: Buffer = response.body.values;
+            const binDecoded = values.readUInt8(0).toString(2).padStart(3, '0').split('');
             // @ts-ignore
             console.log(`[MASTER][MultipleCoils][READ] Address: 01-03, Values: ${binDecoded.join(', ')}`);
         }, (errorReason) => {
@@ -89,7 +89,7 @@ export const CoilsTest = (master: Modbus.ModbusRTUClient): CallableFunction[] =>
         });
     },
     () => {
-        let randomVal: 0 | 1 = (randomInt(1, 255) >= 125) ? 0 : 1;
+        const randomVal: 0 | 1 = (randomInt(1, 255) >= 125) ? 0 : 1;
         console.log(
             `[MASTER][SingleCoil][WRITE] Address: 01, Value: ${randomVal}`
         );
@@ -98,7 +98,7 @@ export const CoilsTest = (master: Modbus.ModbusRTUClient): CallableFunction[] =>
         })
     },
     () => {
-        let randomVal = [
+        const randomVal = [
             Boolean(randomInt(0, 255) >= 125),
             Boolean(randomInt(0, 255) >= 125)
         ];
@@ -112,10 +112,10 @@ export const CoilsTest = (master: Modbus.ModbusRTUClient): CallableFunction[] =>
     },
     () => {
         master.readCoils(1, 3).then((val) => {
-            let response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
+            const response: Modbus.ModbusRTUResponse = val.response as Modbus.ModbusRTUResponse;
             // @ts-ignore
-            let values: Buffer = response.body.values;
-            let binDecoded = values.readUInt8(0).toString(2).padStart(3, '0').split('');
+            const values: Buffer = response.body.values;
+            const binDecoded = values.readUInt8(0).toString(2).padStart(3, '0').split('');
             // @ts-ignore
             console.log(`[MASTER][MultipleCoils][READ] Address: 01-03, Values: ${binDecoded.join(', ')}`);
         }, (errorReason) => {
@@ -126,9 +126,9 @@ export const CoilsTest = (master: Modbus.ModbusRTUClient): CallableFunction[] =>
 
 export const DiscreteInputsTest =  (master: Modbus.ModbusRTUClient): CallableFunction[] => [
     () => {
-        let randomOffset = randomInt(1, 30) + 1;
+        const randomOffset = randomInt(1, 30) + 1;
         master.readDiscreteInputs(randomOffset, 3).then((val) => {
-            let response: any = val.response as Modbus.ModbusRTUResponse;
+            const response: any = val.response as Modbus.ModbusRTUResponse;
             console.log(`[MASTER][DiscreteInputs][READ] Address: ${randomOffset}-${(randomOffset + 3)}, Values: ${response.body._valuesAsArray.join(', ')}`);
         }, (errorReason) => {
             console.log('[MASTER][DiscreteInputs][READ][ERROR]', errorReason);
