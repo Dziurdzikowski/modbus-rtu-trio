@@ -1,6 +1,7 @@
-import { MasterWithTests, createMaster } from './src/createMaster';
+import { MasterWithTests, createMaster } from '../src/master';
 
-const serialPath = '/dev/ttyS13';
+const serialPath = process.argv[2] ? process.argv[2] : '/dev/ttyS13';
+
 const master: MasterWithTests = createMaster(serialPath, 1);
 
 let testoperationindex = 0;
@@ -15,11 +16,6 @@ setInterval(() => {
     if(testoperationlist.length === testoperationindex) {
         testoperationindex = 0;
     }
-
-    try {
-        testoperationlist[testoperationindex]();
-    } catch(err) {
-        console.log('ERROR OKURWED', err);
-    }
+    testoperationlist[testoperationindex]();
     testoperationindex++;
 }, 5000)

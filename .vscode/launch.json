@@ -17,7 +17,7 @@
             "env": {
                 "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            "program": "${workspaceFolder}/slave.ts",
+            "program": "${workspaceFolder}/scripts/createSlave.ts",
         },
         {
             "type": "pwa-node",
@@ -32,7 +32,7 @@
             "env": {
                 "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            "program": "${workspaceFolder}/master.ts",
+            "program": "${workspaceFolder}/scripts/createMaster.ts",
         },
         {
             "type": "pwa-node",
@@ -47,7 +47,7 @@
             "env": {
                 "PATH": "${env:PATH}:${workspaceFolder}/node_modules/.bin",
             },
-            "program": "${workspaceFolder}/monitor.ts",
+            "program": "${workspaceFolder}/scripts/createMonitor.ts",
             "args": [],
             "outputCapture": "console"
         }

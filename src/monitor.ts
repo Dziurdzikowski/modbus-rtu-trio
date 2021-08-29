@@ -36,8 +36,8 @@ const dataLogger = (data: Buffer) => {
 };
 
 export const createMonitor = (serialPath = '/dev/ttyS11', serialPathDwa = '/dev/ttyS12') => {
-    const slaveSocket: stream.Duplex = new SerialConnection(serialPath, { baudRate: 9600 });
-    const masterSocket: stream.Duplex = new SerialConnection(serialPathDwa, { baudRate: 9600 })
+    const slaveSocket: stream.Duplex = new SerialConnection(serialPath);
+    const masterSocket: stream.Duplex = new SerialConnection(serialPathDwa)
 
     slaveSocket.pipe(masterSocket);
     masterSocket.pipe(slaveSocket);

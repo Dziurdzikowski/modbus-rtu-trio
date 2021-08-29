@@ -9,7 +9,7 @@ import {
 
 export const createMaster = (serialPath: string, slaveID: number = 1): MasterWithTests => {
     const master = new MasterWithTests(
-        new SerialConnection(serialPath, { baudRate: 9600 }),
+        new SerialConnection(serialPath),
         slaveID,
         5000
     );

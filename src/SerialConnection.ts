@@ -141,4 +141,18 @@ SerialPort.parsers = {
     Regex: require('@serialport/parser-regex'),
 }
 // tslint:disable-next-line: max-classes-per-file
-export default class SerialConnection extends SerialPort { };
+export default class SerialConnection extends SerialPort {
+    constructor(path: string, options: OpenOptions = { baudRate: 9600 }) {
+        super(
+            path,
+            options,
+            (error) => {
+                if (typeof error === 'undefined' || error === null) {
+                    return;
+                }
+                console.log(error);
+                process.exit(1)
+            }
+        )
+    }
+};
