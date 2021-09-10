@@ -11,7 +11,7 @@ export const createMaster = (serialPath: string, slaveID: number = 1): MasterWit
     const master = new MasterWithTests(
         new SerialConnection(serialPath),
         slaveID,
-        5000
+        15000
     );
 
     console.log(`[MASTER] Created at port ${serialPath}`);
