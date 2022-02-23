@@ -35,35 +35,21 @@ const dataLogger = (data: Buffer) => {
     console.warn('UNKOWN DATA !');
 };
 
-export const createMonitor = (serialPath = '/dev/ttyS11', serialPathDwa = '/dev/ttyS12') => {
-    const slaveSocket: stream.Duplex = new SerialConnection(serialPath);
-    const masterSocket: stream.Duplex = new SerialConnection(serialPathDwa)
-
-    slaveSocket.pipe(masterSocket);
-    masterSocket.pipe(slaveSocket);
-
-    console.log(`[MONITOR] Created at ports ${serialPath}, ${serialPathDwa}`);
-
+export const createMonitor = (serialPath) => {
+    const masterSocket: stream.Duplex = new SerialConnection(serialPath)
     let lastRequest: RequestDataFrame;
-    let lastResponse: ResponseDataFrame;
+
+    console.log(`[MONITOR] Created at ports ${serialPath}`);
 
     masterSocket.addListener(
         'data',
         (data) => {
             lastRequest = SerialDataParser.ParseRequest(data);
-            slaveSocket.once('data', (data) => {
-                lastResponse = SerialDataParser.ParseResponse(data, lastRequest);
-                lastResponse.logInfo();
-            })
             lastRequest.logInfo()
         }
     );
 
-    // monitor.addListener('data', (data) => dataLogger(data))
-
-
     return {
-        slaveSocket,
         masterSocket
     };
 };
